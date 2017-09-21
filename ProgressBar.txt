@@ -1,0 +1,104 @@
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        #myProgress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #myBar {
+            width: 1%;
+            height: 30px;
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div id="myProgress">
+        <div id="myBar"></div>
+        <span id="per"></span>
+    </div>
+
+    <br>
+    <button onclick="move()">Click Me</button> 
+    <button onclick="Get()">Ajax Click</button> 
+    <div> 
+    </div>
+</body>
+</html>
+
+<script>
+    var width = 1;
+    var id;
+    var percentage;
+    function loopcount(i, percentage) {
+        setTimeout(function () {
+            console.log(i)
+
+            $('#myBar').width((i * 10)+"%");
+            $('#per').text(percentage);
+        },i*1000)
+    }
+    function Get() {
+        console.log('hi');
+        $.ajax({
+            url: "http://localhost:3581/Home/Test1",
+            contentType: "application/json",
+            type: "GET",
+            datatype: "json",
+            data: {},
+            error: function (error) {
+                alert(error);
+            },
+            success: function (data) {
+                $('#per').text('AJax' + data);
+
+                for (var i = 1; i <= 10; i++) {
+                    percentage = Math.round(i * 100 / 10);
+                    console.log(percentage);
+                    //debugger;
+                    loopcount(i, percentage);
+                   //id = setInterval(frame, 10);
+                   //console.log()
+                }
+                   // alert("success");
+                
+            }
+        });
+
+    }
+    function frame() {
+        if (width >= 100) {
+            clearInterval(id);
+        } else {
+            width++;
+            $('#per').text(width + '%');
+            console.log(width);
+            //elem.style.width = width + '%';
+        }
+    }
+    function move() {
+        var elem = document.getElementById("myBar");
+        var width = 1;
+        var id = setInterval(frame, 10);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                $('#per').text(width + '%');
+                elem.style.width = width + '%';
+            }
+        }
+    }
+</script>
